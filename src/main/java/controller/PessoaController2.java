@@ -2,7 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 
-import exception.ControleVacinasException;
+//import exception.VemNoX1Exception;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -24,7 +24,7 @@ public class PessoaController {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException  {
+	public Pessoa salvar(Pessoa novaPessoa) { //throws VemNoX1Exception {
 		 return service.salvar(novaPessoa);
 	}	
 	
@@ -67,11 +67,8 @@ public class PessoaController {
 
 
 
+
+
 //	DÚVIDAS:
 //	-	onde coloco exception?
 //	-	getInt funciona pra ID?
-
-
-
-
-
