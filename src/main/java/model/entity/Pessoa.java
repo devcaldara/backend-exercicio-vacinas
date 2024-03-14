@@ -9,13 +9,13 @@ public class Pessoa {
 	private String sexo;
 	private String cpf;
 	private LocalDate dataNascimento;
-	private String categoria;
+	private int categoria;
 
 	public Pessoa() {
 		super();
 	}
 
-	public Pessoa(int idPessoa, String nome, String sexo, String cpf, LocalDate dataNascimento, String categoria) {
+	public Pessoa(int idPessoa, String nome, String sexo, String cpf, LocalDate dataNascimento, int categoria) {
 		super();
 		this.idPessoa = idPessoa;
 		this.nome = nome;
@@ -65,11 +65,11 @@ public class Pessoa {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public String getCategoria() {
+	public int getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
+	public void setCategoria(int categoria) {
 		this.categoria = categoria;
 	}
 	

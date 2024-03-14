@@ -29,7 +29,7 @@ public class PessoaController {
 	}	
 	
 	@GET
-	@Path("/")
+	@Path("/todas")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Pessoa> consultarTodos(){
@@ -38,39 +38,30 @@ public class PessoaController {
 	
 	@DELETE
 	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public boolean excluir(@PathParam("id") int idPessoa) {
 		return service.excluir(idPessoa);
 	}
 	
-	/*
+	
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean alterar(Pessoa PessoaEditada) {
 		return service.alterar(PessoaEditada);
-	}*/
+	}
 	
-	/*
+	
 	@GET
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Pessoa consultarPorId(int idPessoa) {
 		return service.consultarPorId(idPessoa);
-	}*/	
+	}
 		
 
 }
-
-
-
-//	DÚVIDAS:
-//	-	onde coloco exception?
-//	-	getInt funciona pra ID?
-
 
 
 

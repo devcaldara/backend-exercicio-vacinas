@@ -26,7 +26,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			pstmt.setString(2, novaPessoa.getCpf());
 			pstmt.setDate(3, Date.valueOf(novaPessoa.getDataNascimento()));
 			pstmt.setString(4, novaPessoa.getSexo());
-			pstmt.setString(5, novaPessoa.getCategoria());
+			pstmt.setInt(5, novaPessoa.getCategoria());
 			
 			pstmt.execute();
 			ResultSet result = pstmt.getGeneratedKeys();
@@ -83,7 +83,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			pstmt.setString(2, pessoaEditada.getCpf());
 			pstmt.setDate(3, Date.valueOf(pessoaEditada.getDataNascimento()));
 			pstmt.setString(4, pessoaEditada.getSexo());
-			pstmt.setString(5, pessoaEditada.getCategoria());
+			pstmt.setInt(5, pessoaEditada.getCategoria());
 			pstmt.setInt(6, pessoaEditada.getIdPessoa());
 			
 			alterou = pstmt.executeUpdate(sql) == 1;
@@ -117,7 +117,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 				pessoaLocal.setCpf(result.getString("cpf"));
 				pessoaLocal.setDataNascimento(result.getDate("dataNascimento").toLocalDate());
 				pessoaLocal.setSexo(result.getString("sexo"));
-				pessoaLocal.setCategoria(result.getString("categoria"));
+				pessoaLocal.setCategoria(result.getInt("categoria"));
 			}
 			
 		}  catch (SQLException erro){
@@ -153,7 +153,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 				pessoa.setCpf(result.getString("cpf"));
 				pessoa.setDataNascimento(result.getDate("dataNascimento").toLocalDate());
 				pessoa.setSexo(result.getString("sexo"));
-				pessoa.setCategoria(result.getString("categoria"));
+				pessoa.setCategoria(result.getInt("categoria"));
 				
 				pessoas.add(pessoa);
 			}

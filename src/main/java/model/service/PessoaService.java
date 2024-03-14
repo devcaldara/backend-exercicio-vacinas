@@ -1,6 +1,6 @@
 package model.service;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 
 import exception.ControleVacinasException;
 import model.repository.PessoaRepository;
@@ -15,11 +15,11 @@ public class PessoaService {
 		if (validarPessoa(novaPessoa)) {
 			return repository.salvar(novaPessoa);			
 		} else {
-			throw new ControleVacinasException("Deu erro");
+			throw new ControleVacinasException("Erro ao tentar criar um novo registro de Pessoa :(");
 		}		
 	}
 	
-	public boolean excluir(int idPessoa) {
+	public boolean excluir(int idPessoa){
 		return repository.excluir(idPessoa);
 	}
 	
@@ -38,10 +38,10 @@ public class PessoaService {
 	public boolean validarPessoa(Pessoa pessoa) {
 		boolean valido = false;	
 		if(pessoa.getNome().equalsIgnoreCase(null) || pessoa.getNome().equalsIgnoreCase("")) {
-		} else if(pessoa.getCategoria().equalsIgnoreCase(null) || pessoa.getCategoria().equalsIgnoreCase("")) {
+		} else if(pessoa.getCategoria() == 0 || pessoa.getCategoria() <= 0){
 		} else if(pessoa.getSexo().equalsIgnoreCase(null) || pessoa.getSexo().equalsIgnoreCase("")) {
 		} else if(pessoa.getCpf().equalsIgnoreCase(null) || pessoa.getCpf().equalsIgnoreCase("")) {
-		} else if(pessoa.getIdPessoa()<= 0) {
+		//} else if(pessoa.getIdPessoa()<= 0) {
 		} else if(pessoa.getDataNascimento().equals(null)) {
 		} else {
 			valido = true;
