@@ -1,10 +1,12 @@
 package model.service;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;  
 
 import exception.ControleVacinasException;
 import model.repository.PessoaRepository;
+import model.repository.VacinacaoRepository;
 import model.entity.Pessoa;
+import model.entity.Vacinacao;
 
 public class PessoaService {
 	
@@ -12,19 +14,36 @@ public class PessoaService {
 	
 	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException {
 		
-		if (validarPessoa(novaPessoa)) {
-			return repository.salvar(novaPessoa);			
+		return repository.salvar(novaPessoa);
+		
+		/* if (validarPessoa(novaPessoa) && repository.cpfJaCadastrado(novaPessoa.getCpf()) == false) {
+		return repository.salvar(novaPessoa);			
+	} else {
+		throw new ControleVacinasException("Erro ao tentar criar um novo registro de Pessoa :(");
+	}	*/	
+	}
+	
+	public boolean excluir(int idPessoa)throws ControleVacinasException {
+		
+		if(!pessoaRecebeuVacina(idPessoa)) {
+			return repository.excluir(idPessoa);			
 		} else {
-			throw new ControleVacinasException("Erro ao tentar criar um novo registro de Pessoa :(");
-		}		
+			throw new ControleVacinasException("Erro ao excluir pois já existe vacinação com essa pessoa");
+		}
 	}
 	
-	public boolean excluir(int idPessoa){
-		return repository.excluir(idPessoa);
+	private boolean pessoaRecebeuVacina(int idPessoa) {
+		VacinacaoRepository vacinacaoRepository = new VacinacaoRepository();
+		
+		if(vacinacaoRepository.consultarPorPessoa(idPessoa).isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
-	
+
 	public boolean alterar(Pessoa pessoaEditada) {
-		return repository.alterar(pessoaEditada);
+		return repository.alterar(pessoaEditada);	
 	}
 	
 	public Pessoa consultarPorId(int idPessoa) {
@@ -35,8 +54,9 @@ public class PessoaService {
 		return repository.consultarTodos();
 	}
 	
-	public boolean validarPessoa(Pessoa pessoa) {
+	public boolean validarPessoa(Pessoa pessoa) throws ControleVacinasException{
 		boolean valido = false;	
+		
 		if(pessoa.getNome().equalsIgnoreCase(null) || pessoa.getNome().equalsIgnoreCase("")) {
 		} else if(pessoa.getCategoria() == 0 || pessoa.getCategoria() <= 0){
 		} else if(pessoa.getSexo().equalsIgnoreCase(null) || pessoa.getSexo().equalsIgnoreCase("")) {

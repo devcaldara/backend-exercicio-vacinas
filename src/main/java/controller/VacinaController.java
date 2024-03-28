@@ -12,57 +12,50 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import model.entity.Pessoa;
-import model.service.PessoaService;
+import model.entity.Vacina;
+import model.service.VacinaService;
 
-@Path("/pessoa")
-public class PessoaController {
+@Path("/vacina")
+public class VacinaController {
 	
-	private PessoaService service = new PessoaService();
-	
+	private VacinaService service = new VacinaService();
+
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException  {
-		 return service.salvar(novaPessoa);
-	}	
-	
+	public Vacina salvar(Vacina novaVacina) throws ControleVacinasException {
+		return service.salvar(novaVacina);
+	}
+
 	@GET
 	@Path("/todas")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Pessoa> consultarTodos(){
-		return service.consultarTodas();
+	public ArrayList<Vacina> consultarTodos() {
+		return service.consultarTodos();
 	}
-	
+
 	@DELETE
 	@Path("/{id}")
-	public boolean excluir(@PathParam("id") int idPessoa) throws ControleVacinasException {
-		return service.excluir(idPessoa);
+	public boolean excluir(@PathParam("id") int idVacina) throws ControleVacinasException  {
+		return service.excluir(idVacina);
 	}
-	
-	
+
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public boolean alterar(Pessoa PessoaEditada) {
-		return service.alterar(PessoaEditada);
+	public boolean alterar(Vacina vacinaEditada) {
+		return service.alterar(vacinaEditada);
 	}
-	
-	
+
 	@GET
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa consultarPorId(int idPessoa) {
-		return service.consultarPorId(idPessoa);
+	public Vacina consultarPorId(@PathParam("id") int idVacina) {
+		return service.consultarPorId(idVacina);
 	}
-		
 
 }
-
-
-
-

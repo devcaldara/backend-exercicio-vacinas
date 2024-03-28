@@ -1,6 +1,6 @@
 package model.repository;
 
-import java.sql.Connection; 
+import java.sql.Connection;   
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,8 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 
 	@Override
 	public Pessoa salvar(Pessoa novaPessoa) {
-		String sql = "insert into Pessoa (nome, cpf, dataNascimento, sexo, categoria) values (?,?,?,?,?)";
+		//	String sql = "insert into Pessoa (nome, cpf, dataNascimento, sexo, categoria) values (?,?,?,?,?)";
+		String sql = "insert into Pessoa (nome, cpf, dataNascimento, sexo, categoria, id_pais) values (?,?,?,?,?,?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, sql);
 		
@@ -27,6 +28,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			pstmt.setDate(3, Date.valueOf(novaPessoa.getDataNascimento()));
 			pstmt.setString(4, novaPessoa.getSexo());
 			pstmt.setInt(5, novaPessoa.getCategoria());
+			pstmt.setInt(6, novaPessoa.getPais().getIdPais());
 			
 			pstmt.execute();
 			ResultSet result = pstmt.getGeneratedKeys();
@@ -75,7 +77,10 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 	@Override
 	public boolean alterar(Pessoa pessoaEditada) {
 		boolean alterou = false;
-		String sql = "update Pessoa set nome = ?, cpf = ?, dataNascimento = ?, sexo = ?, categoria = ? where idPessoa = ?" ;
+		
+		//	String sql = "update Pessoa set nome = ?, cpf = ?, dataNascimento = ?, sexo = ?, categoria = ? where idPessoa = ?" ;
+		String sql = "update Pessoa set nome = ?, cpf = ?, dataNascimento = ?, sexo = ?, categoria = ?, id_pais = ? where idPessoa = ?" ;
+
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, sql);
 		try {
@@ -84,9 +89,10 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			pstmt.setDate(3, Date.valueOf(pessoaEditada.getDataNascimento()));
 			pstmt.setString(4, pessoaEditada.getSexo());
 			pstmt.setInt(5, pessoaEditada.getCategoria());
-			pstmt.setInt(6, pessoaEditada.getIdPessoa());
+			pstmt.setInt(6, pessoaEditada.getPais().getIdPais());
+			pstmt.setInt(7, pessoaEditada.getIdPessoa()); 
 			
-			alterou = pstmt.executeUpdate(sql) == 1;
+			alterou = pstmt.executeUpdate() > 0;
 			
 		} catch (SQLException erro) {
 			System.out.println("Erro ao atualizar Pessoa");
@@ -110,14 +116,18 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 		
 		try {
 			result = stmt.executeQuery(sql);
+			PaisRepository paisRepo = new PaisRepository();
+			//	VacinacaoRepository vacinacaoRepo = new VacinacaoRepository();
 			
 			if(result.next()){
-				pessoaLocal.setIdPessoa(Integer.parseInt(result.getString("idPessoa")));
+				pessoaLocal.setIdPessoa(result.getInt("idPessoa"));
 				pessoaLocal.setNome(result.getString("nome"));
 				pessoaLocal.setCpf(result.getString("cpf"));
 				pessoaLocal.setDataNascimento(result.getDate("dataNascimento").toLocalDate());
 				pessoaLocal.setSexo(result.getString("sexo"));
 				pessoaLocal.setCategoria(result.getInt("categoria"));
+				pessoaLocal.setPais(paisRepo.consultarPorId(result.getInt("id_pais")));
+				//	pessoaLocal.setVacinacoes(vacinacaoRepo.consultarPorPessoa(result.getInt("idPessoa")));
 			}
 			
 		}  catch (SQLException erro){
@@ -144,16 +154,21 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 		
 		try {
 			result = stmt.executeQuery(sql);
+			PaisRepository paisRepo = new PaisRepository();
+			//	VacinacaoRepository vacinacaoRepo = new VacinacaoRepository();
 			
 			while(result.next()) {
 				Pessoa pessoa = new Pessoa();
 				
-				pessoa.setIdPessoa(Integer.parseInt(result.getString("idPessoa")));
+				pessoa.setIdPessoa(result.getInt("idPessoa"));
 				pessoa.setNome(result.getString("nome"));
 				pessoa.setCpf(result.getString("cpf"));
 				pessoa.setDataNascimento(result.getDate("dataNascimento").toLocalDate());
 				pessoa.setSexo(result.getString("sexo"));
 				pessoa.setCategoria(result.getInt("categoria"));
+				pessoa.setPais(paisRepo.consultarPorId(result.getInt("id_pais")));
+				//	pessoa.setVacinacoes(vacinacaoRepo.consultarPorPessoa(result.getInt("idPessoa")));
+
 				
 				pessoas.add(pessoa);
 			}
@@ -171,21 +186,26 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 		return pessoas;
 	}
 	
+	
+	public boolean cpfJaCadastrado(String cpf) {
+		boolean cpfJaUtilizado = false;	
+		
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String query = " SELECT count(idPessoa) FROM pessoa WHERE cpf = " + cpf;
+		
+		try {
+			ResultSet resultado = stmt.executeQuery(query);
+			cpfJaUtilizado = (resultado.getInt(1) > 0);
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar CPF. Causa: " + e.getMessage());
+		}
+		
+		return cpfJaUtilizado;
+	}
+	
 
 }
-
-
-
-
-
-/*
- 
- */
-
-
-
-
-
 
 
 
